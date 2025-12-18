@@ -1,4 +1,4 @@
-#Changes to make in the worker.py file in venv
+##Changes to make in the worker.py file in venv
  
  @utils.log_exceptions(logger=logger)
     async def _connection_task(self) -> None:
