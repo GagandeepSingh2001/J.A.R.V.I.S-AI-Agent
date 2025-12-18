@@ -8,3 +8,6 @@
             import aiohttp
             self._http_session = aiohttp.ClientSession()
 ```
+
+## Note:
+-- Use livekit-agents Version: 1.3.5 with aiohttp Version: 3.10.0
