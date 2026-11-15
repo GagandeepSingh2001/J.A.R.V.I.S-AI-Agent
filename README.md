@@ -18,7 +18,6 @@ Replace it with:
 self._http_session = aiohttp.ClientSession()
 ```
 2. Replace the aclose() method
-Your existing shutdown method assumes all resources have been initialized. Replace the entire method with this version:
 ```
 async def aclose(self) -> None:
     async with self._lock:
