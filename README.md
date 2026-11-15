@@ -101,8 +101,8 @@ python agent.py console
 -- Use livekit-agents Version: 1.3.5 with aiohttp Version: 3.10.0
 
 # After making all the adjustments the frontend (UI) should look like this:
-!<img width="1360" height="767" alt="image" src="https://github.com/user-attachments/assets/54913797-5c4c-4159-bffd-3c3095b34c93" />
-!<img width="1360" height="767" alt="image" src="https://github.com/user-attachments/assets/1e5d6750-67b3-4c04-a430-9d7ff377ec15" />
+<img width="1000" height="408" alt="image" src="https://github.com/user-attachments/assets/54913797-5c4c-4159-bffd-3c3095b34c93" />
+<img width="1000" height="408" alt="image" src="https://github.com/user-attachments/assets/1e5d6750-67b3-4c04-a430-9d7ff377ec15" />
 
 
 
