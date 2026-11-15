@@ -8,6 +8,81 @@
             import aiohttp
             self._http_session = aiohttp.ClientSession()
 ```
+1. Fix the ClientSession initialization
+Inside run(), find:
+```
+self._http_session = aiohttp.ClientSession(proxy=self._http_proxy or None)
+```
+Replace it with:
+```
+self._http_session = aiohttp.ClientSession()
+```
+2. Replace the aclose() method
+Your existing shutdown method assumes all resources have been initialized. Replace the entire method with this version:
+```
+async def aclose(self) -> None:
+    async with self._lock:
+        if self._closed:
+            if self._close_future is not None:
+                await self._close_future
+            return
+
+        logger.info("shutting down worker", extra={"id": self.id})
+
+        self._closed = True
+
+        # Cancel background tasks if they were started.
+        if self._conn_task is not None:
+            await utils.aio.cancel_and_wait(self._conn_task)
+            self._conn_task = None
+
+        if self._load_task is not None:
+            await utils.aio.cancel_and_wait(self._load_task)
+            self._load_task = None
+
+        # Close process pool if initialized.
+        if hasattr(self, "_proc_pool") and self._proc_pool is not None:
+            await self._proc_pool.aclose()
+
+        # Close inference executor if initialized.
+        if (
+            hasattr(self, "_inference_executor")
+            and self._inference_executor is not None
+        ):
+            await self._inference_executor.aclose()
+
+        # Close HTTP session if initialized.
+        if self._http_session is not None and not self._http_session.closed:
+            await self._http_session.close()
+
+        # Close HTTP server if initialized.
+        if self._http_server is not None:
+            await self._http_server.aclose()
+
+        # Close Prometheus server if initialized.
+        if (
+            hasattr(self, "_prometheus_server")
+            and self._prometheus_server is not None
+        ):
+            await self._prometheus_server.aclose()
+
+        # Close LiveKit API if initialized.
+        if hasattr(self, "_api") and self._api is not None:
+            await self._api.aclose()
+
+        # Wait for remaining background tasks.
+        if hasattr(self, "_tasks") and self._tasks:
+            await asyncio.gather(*self._tasks, return_exceptions=True)
+
+        # Close message channel if initialized.
+        if hasattr(self, "_msg_chan") and self._msg_chan is not None:
+            self._msg_chan.close()
+
+        # Resolve shutdown future if it exists.
+        if self._close_future is not None:
+            if not self._close_future.done():
+                self._close_future.set_result(None)
+```
 
 # Commands to run J.A.R.V.I.S:
 ## Frontend:
