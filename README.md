@@ -1,4 +1,4 @@
-## Changes to make in the worker.py file in venv
+# Changes to make in the worker.py file in venv
  ```
  @utils.log_exceptions(logger=logger)
     async def _connection_task(self) -> None:
@@ -9,12 +9,12 @@
             self._http_session = aiohttp.ClientSession()
 ```
 
-## Commands to run J.A.R.V.I.S:
-# Frontend:
+# Commands to run J.A.R.V.I.S:
+## Frontend:
 ```
 npm run dev
 ```
-# Backend:
+## Backend:
 ```
 venv\Scripts\activate
 ```
@@ -23,5 +23,5 @@ python agent.py dev
 python agent.py console
 ```
 
-## Note:
+# Note:
 -- Use livekit-agents Version: 1.3.5 with aiohttp Version: 3.10.0
